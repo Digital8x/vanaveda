@@ -27,7 +27,7 @@ const sendLeadNotification = async (lead) => {
 <body style="font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:20px;">
   <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.1);">
     <div style="background:linear-gradient(135deg,#0a4a2e,#1a7a4a);padding:20px 30px;">
-      <h1 style="color:#D4AF37;margin:0;font-size:22px;">🏡 New Lead — Codename Green Gold Nerul</h1>
+      <h1 style="color:#D4AF37;margin:0;font-size:22px;">🏡 New Lead — ${process.env.PROJECT_NAME || 'Codename Vana Veda'}</h1>
       <p style="color:#a0c8a0;margin:5px 0 0;font-size:13px;">Submitted: ${new Date(lead.submitted_at).toLocaleString('en-IN', {timeZone:'Asia/Kolkata'})}</p>
     </div>
     <div style="padding:25px 30px;">
@@ -79,7 +79,7 @@ const sendLeadNotification = async (lead) => {
       </table>
     </div>
     <div style="background:#0a4a2e;padding:15px 30px;text-align:center;">
-      <p style="color:#D4AF37;margin:0;font-size:12px;">Codename Green Gold Nerul — Sai Developers | Digital 8x Leads</p>
+      <p style="color:#D4AF37;margin:0;font-size:12px;">${process.env.PROJECT_NAME || 'Codename Vana Veda'} — Sai Developers | Digital 8x Leads</p>
     </div>
   </div>
 </body>
@@ -88,7 +88,7 @@ const sendLeadNotification = async (lead) => {
   await transporter.sendMail({
     from: `"${process.env.SMTP_FROM_NAME}" <${process.env.SMTP_FROM_EMAIL}>`,
     to: adminEmails.join(', '),
-    subject: `🏡 New Lead: ${lead.name} | ${lead.phone} | Green Gold Nerul`,
+    subject: `🏡 New Lead: ${lead.name} | ${lead.phone} | ${process.env.PROJECT_NAME || 'Codename Vana Veda'}`,
     html
   });
 };

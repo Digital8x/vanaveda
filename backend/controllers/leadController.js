@@ -86,7 +86,7 @@ const submitLead = async (req, res) => {
         device, browser, ua,
         utm_source, utm_medium, utm_campaign, utm_term,
         utm_content, refer_url,
-        'Codename Green Gold Nerul', source_button, page_url,
+        process.env.PROJECT_NAME || 'Codename Vana Veda', source_button, page_url,
         spam_risk_score
       ]
     );

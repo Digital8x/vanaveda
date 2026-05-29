@@ -61,7 +61,7 @@ app.get('/admin/*', (req, res) => res.sendFile(path.join(__dirname, 'admin', 'da
 app.use('/images', express.static(path.join(__dirname, '..', 'images')));
 
 // ── Health Check
-app.get('/api/health', (req, res) => res.json({ status: 'ok', project: 'Codename Green Gold Nerul', time: new Date() }));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', project: process.env.PROJECT_NAME || 'Codename Vana Veda', time: new Date() }));
 
 // ── Serve Frontend
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
@@ -76,7 +76,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`\n🏡 Codename Green Gold Nerul Server`);
+  console.log(`\n🏡 ${process.env.PROJECT_NAME || 'Codename Vana Veda'} Server`);
   console.log(`✅ Running on port ${PORT}`);
   console.log(`🌐 Site: http://localhost:${PORT}`);
   console.log(`🔐 Admin: http://localhost:${PORT}/admin\n`);
