@@ -108,5 +108,5 @@ CREATE TABLE IF NOT EXISTS `rate_limit_log` (
 -- Password: demo%111 (bcrypt hash)
 -- ============================================================
 INSERT INTO `admins` (`username`, `password`, `full_name`, `email`) VALUES
-('admin', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4oZ5YFPe2K', 'Admin', 'harshmheswry@gmail.com')
+('admin', '$2a$12$erUAlTqMmytxgY4a0Awaye989RyJrqw3jnFp7qvfZWhEf1lzyZMz.', 'Admin', 'harshmheswry@gmail.com')
 ON DUPLICATE KEY UPDATE `username` = `username`;
