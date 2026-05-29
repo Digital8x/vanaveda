@@ -14,6 +14,7 @@ const getRealIp = (req) => {
 
 // Check per-IP rate limit (3/hour)
 const checkIpRateLimit = async (ip) => {
+  if (ip === '127.0.0.1' || ip === '::1' || ip === '0.0.0.0') return false;
   const oneHourAgo = new Date(Date.now() - 3600000);
   const [rows] = await db.execute(
     'SELECT COUNT(*) as cnt FROM `rate_limit_log` WHERE `ip_address` = ? AND `submitted_at` > ?',

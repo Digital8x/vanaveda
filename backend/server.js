@@ -37,9 +37,13 @@ app.set('trust proxy', 1);
 // ── Global Rate Limit on API
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 10000, // Relaxed limit to prevent proxy IP blocks
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
+  skip: (req) => {
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    return ip === '127.0.0.1' || ip === '::1';
+  }
 });
 app.use('/api', apiLimiter);
 
