@@ -79,7 +79,7 @@ const sendLeadNotification = async (lead) => {
       </table>
     </div>
     <div style="background:#0a4a2e;padding:15px 30px;text-align:center;">
-      <p style="color:#D4AF37;margin:0;font-size:12px;">${process.env.PROJECT_NAME || 'Codename Vana Veda'} — Sai Developers | Digital 8x Leads</p>
+      <p style="color:#D4AF37;margin:0;font-size:12px;">${process.env.PROJECT_NAME || 'Codename Vana Veda'} — Sai Developers | ${process.env.SMTP_FROM_NAME || 'Vana Veda Leads'}</p>
     </div>
   </div>
 </body>
