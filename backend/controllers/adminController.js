@@ -32,7 +32,7 @@ const getLeads = async (req, res) => {
     const [countRows] = await db.execute(`SELECT COUNT(*) as total FROM leads l ${whereStr}`, params);
     const total = countRows[0].total;
 
-    const [leads] = await db.execute(
+    const [leads] = await db.query(
       `SELECT l.*, 
               (SELECT GROUP_CONCAT(n.note ORDER BY n.created_at DESC SEPARATOR '|||') 
                FROM lead_notes n 
