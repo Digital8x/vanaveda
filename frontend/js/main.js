@@ -1,13 +1,22 @@
 // ── Preloader
-window.addEventListener('load', () => {
+const hidePreloader = () => {
   const preloader = document.getElementById('preloader');
-  if (preloader) {
+  if (preloader && !preloader.classList.contains('preloader-fade')) {
     preloader.classList.add('preloader-fade');
     setTimeout(() => {
       preloader.style.display = 'none';
-    }, 600);
+    }, 800);
   }
+};
+
+// Start fading out after exactly 1 second (1000ms)
+window.addEventListener('load', () => {
+  setTimeout(hidePreloader, 1000);
 });
+
+// Failsafe: force fade out after 1.5 seconds in case some image/iframe is blocked
+setTimeout(hidePreloader, 1500);
+
 
 // ── Navbar scroll
 const navbar = document.getElementById('navbar');
