@@ -1,3 +1,14 @@
+// ── Preloader
+window.addEventListener('load', () => {
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    preloader.classList.add('preloader-fade');
+    setTimeout(() => {
+      preloader.style.display = 'none';
+    }, 600);
+  }
+});
+
 // ── Navbar scroll
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
