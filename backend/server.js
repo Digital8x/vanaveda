@@ -60,14 +60,14 @@ app.get('/admin/*', (req, res) => res.sendFile(path.join(__dirname, 'admin', 'da
 // ── Serve Images
 app.use('/images', express.static(path.join(__dirname, '..', 'images')));
 
+// ── Health Check
+app.get('/api/health', (req, res) => res.json({ status: 'ok', project: 'Codename Green Gold Nerul', time: new Date() }));
+
 // ── Serve Frontend
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });
-
-// ── Health Check
-app.get('/api/health', (req, res) => res.json({ status: 'ok', project: 'Codename Green Gold Nerul', time: new Date() }));
 
 // ── Error Handler
 app.use((err, req, res, next) => {
