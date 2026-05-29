@@ -33,11 +33,12 @@ const getLeads = async (req, res) => {
     const total = countRows[0].total;
 
     const [leads] = await db.execute(
-      `SELECT l.*, GROUP_CONCAT(n.note ORDER BY n.created_at DESC SEPARATOR '|||') as notes
+      `SELECT l.*, 
+              (SELECT GROUP_CONCAT(n.note ORDER BY n.created_at DESC SEPARATOR '|||') 
+               FROM lead_notes n 
+               WHERE n.lead_id = l.id) as notes
        FROM leads l
-       LEFT JOIN lead_notes n ON n.lead_id = l.id
        ${whereStr}
-       GROUP BY l.id
        ORDER BY l.submitted_at DESC
        LIMIT ? OFFSET ?`,
       [...params, limit, offset]
@@ -118,7 +119,7 @@ const getStats = async (req, res) => {
     const [[{ this_week }]] = await db.execute("SELECT COUNT(*) as this_week FROM leads WHERE is_deleted = 0 AND submitted_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)");
     const [device_breakdown] = await db.execute("SELECT device, COUNT(*) as count FROM leads WHERE is_deleted = 0 GROUP BY device ORDER BY count DESC");
     const [browser_breakdown] = await db.execute("SELECT browser, COUNT(*) as count FROM leads WHERE is_deleted = 0 GROUP BY browser ORDER BY count DESC");
-    const [country_breakdown] = await db.execute("SELECT country_flag, country, COUNT(*) as count FROM leads WHERE is_deleted = 0 AND country IS NOT NULL GROUP BY country ORDER BY count DESC LIMIT 10");
+    const [country_breakdown] = await db.execute("SELECT country_flag, country, COUNT(*) as count FROM leads WHERE is_deleted = 0 AND country IS NOT NULL GROUP BY country, country_flag ORDER BY count DESC LIMIT 10");
     const [source_breakdown] = await db.execute("SELECT source_button, COUNT(*) as count FROM leads WHERE is_deleted = 0 GROUP BY source_button ORDER BY count DESC");
     const [campaign_breakdown] = await db.execute("SELECT utm_source, utm_campaign, COUNT(*) as count FROM leads WHERE is_deleted = 0 AND utm_source IS NOT NULL GROUP BY utm_source, utm_campaign ORDER BY count DESC LIMIT 10");
     const [status_breakdown] = await db.execute("SELECT lead_status, COUNT(*) as count FROM leads WHERE is_deleted = 0 GROUP BY lead_status");
