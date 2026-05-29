@@ -455,3 +455,19 @@ input.error { border-color: #f87171 !important; }
     .float-whatsapp { bottom: 80px; }
     body { padding-bottom: 50px; }
 }
+
+/* Custom Scrollbar for Proximity List */
+.custom-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+    background: rgba(217, 178, 76, 0.4);
+    border-radius: 4px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}
