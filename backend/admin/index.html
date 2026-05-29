@@ -87,6 +87,17 @@
   </div>
 
   <script>
+    // ── Dynamic Project Rebranding
+    (async () => {
+      try {
+        const res = await fetch('/api/config');
+        const data = await res.json();
+        if (data.project_name) {
+          document.title = `Admin Login | ${data.project_name}`;
+        }
+      } catch (e) { console.error(e); }
+    })();
+
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const u = document.getElementById('username').value;

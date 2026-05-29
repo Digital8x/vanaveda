@@ -229,6 +229,20 @@
       window.open(`/api/admin/export?format=${format}&token=${token}`, '_blank');
     };
 
+    // ── Dynamic Project Rebranding
+    const applyBranding = async () => {
+      try {
+        const res = await fetch('/api/config');
+        const data = await res.json();
+        if (data.project_name) {
+          document.title = `Admin Dashboard | ${data.project_name}`;
+          const brandEl = document.querySelector('.header h2');
+          if (brandEl) brandEl.textContent = `${data.project_name} Admin`;
+        }
+      } catch (e) { console.error(e); }
+    };
+
+    applyBranding();
     fetchStats();
     fetchLeads();
   </script>

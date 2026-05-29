@@ -63,6 +63,9 @@ app.use('/images', express.static(path.join(__dirname, '..', 'images')));
 // ── Health Check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', project: process.env.PROJECT_NAME || 'Codename Vana Veda', time: new Date() }));
 
+// ── Config Endpoint
+app.get('/api/config', (req, res) => res.json({ project_name: process.env.PROJECT_NAME || 'Codename Vana Veda' }));
+
 // ── Serve Frontend
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 app.get('*', (req, res) => {
