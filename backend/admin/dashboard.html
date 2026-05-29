@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Codename Green Gold Nerul</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f4f6f9;
+      color: #333;
+    }
+    .header {
+      background: #0a4a2e;
+      color: #D4AF37;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h2 { margin: 0; }
+    .btn-logout {
+      background: transparent;
+      border: 1px solid #D4AF37;
+      color: #D4AF37;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-logout:hover {
+      background: #D4AF37;
+      color: #0a4a2e;
+    }
+    .container {
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      flex: 1;
+      text-align: center;
+    }
+    .stat-card h3 { margin: 0 0 10px; color: #666; font-size: 14px; text-transform: uppercase; }
+    .stat-card .num { font-size: 32px; font-weight: bold; color: #0a4a2e; }
+    
+    .table-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    th {
+      background: #f8f9fa;
+      font-weight: 600;
+    }
+    .badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .bg-green { background: #e6f4ea; color: #137333; }
+    .bg-red { background: #fce8e6; color: #c5221f; }
+    
+    select.status-select {
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .btn-export {
+      background: #0a4a2e;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h2>Green Gold Admin</h2>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="container">
+    <div class="stats">
+      <div class="stat-card">
+        <h3>Total Leads</h3>
+        <div class="num" id="stat-total">...</div>
+      </div>
+      <div class="stat-card">
+        <h3>Today</h3>
+        <div class="num" id="stat-today">...</div>
+      </div>
+      <div class="stat-card">
+        <h3>This Week</h3>
+        <div class="num" id="stat-week">...</div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div class="controls">
+        <h3>Recent Leads</h3>
+        <div>
+          <button class="btn-export" onclick="exportData('csv')">Export CSV</button>
+          <button class="btn-export" onclick="exportData('excel')" style="margin-left: 10px;">Export Excel</button>
+        </div>
+      </div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Location</th>
+            <th>Source</th>
+            <th>Status</th>
+            <th>Spam Risk</th>
+          </tr>
+        </thead>
+        <tbody id="leads-body">
+          <tr><td colspan="8" style="text-align:center;">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin';
+
+    const headers = { 'Authorization': 'Bearer ' + token };
+
+    const logout = () => {
+      localStorage.removeItem('adminToken');
+      window.location.href = '/admin';
+    };
+
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/admin/stats', { headers });
+        if(res.status === 401 || res.status === 403) logout();
+        const { data } = await res.json();
+        document.getElementById('stat-total').textContent = data.total;
+        document.getElementById('stat-today').textContent = data.today;
+        document.getElementById('stat-week').textContent = data.this_week;
+      } catch (e) { console.error(e); }
+    };
+
+    const fetchLeads = async () => {
+      try {
+        const res = await fetch('/api/admin/leads?limit=50', { headers });
+        const { data } = await res.json();
+        const tbody = document.getElementById('leads-body');
+        tbody.innerHTML = '';
+        
+        if(!data.length) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No leads found.</td></tr>';
+          return;
+        }
+
+        data.forEach(l => {
+          const date = new Date(l.submitted_at).toLocaleString();
+          const riskBadge = l.spam_risk_score > 50 ? 'bg-red' : 'bg-green';
+          
+          tbody.innerHTML += `
+            <tr>
+              <td>${date}</td>
+              <td><strong>${l.name}</strong></td>
+              <td>${l.phone}</td>
+              <td>${l.email || '-'}</td>
+              <td>${l.country_flag || ''} ${l.city || l.country || '-'}</td>
+              <td>${l.source_button}</td>
+              <td>
+                <select class="status-select" onchange="updateStatus(${l.id}, this.value)">
+                  <option value="New" ${l.lead_status==='New'?'selected':''}>New</option>
+                  <option value="Contacted" ${l.lead_status==='Contacted'?'selected':''}>Contacted</option>
+                  <option value="Interested" ${l.lead_status==='Interested'?'selected':''}>Interested</option>
+                  <option value="Site Visit" ${l.lead_status==='Site Visit'?'selected':''}>Site Visit</option>
+                  <option value="Closed" ${l.lead_status==='Closed'?'selected':''}>Closed</option>
+                  <option value="Spam" ${l.lead_status==='Spam'?'selected':''}>Spam</option>
+                </select>
+              </td>
+              <td><span class="badge ${riskBadge}">${l.spam_risk_score}</span></td>
+            </tr>
+          `;
+        });
+      } catch (e) { console.error(e); }
+    };
+
+    window.updateStatus = async (id, status) => {
+      await fetch(`/api/admin/leads/${id}/status`, {
+        method: 'PATCH',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+    };
+
+    window.exportData = (format) => {
+      window.open(`/api/admin/export?format=${format}&token=${token}`, '_blank');
+    };
+
+    fetchStats();
+    fetchLeads();
+  </script>
+</body>
+</html>
