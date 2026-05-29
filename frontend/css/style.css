@@ -454,6 +454,21 @@ input.error { border-color: #f87171 !important; }
     .mobile-cta { display: flex; }
     .float-whatsapp { bottom: 80px; }
     body { padding-bottom: 50px; }
+
+    /* Custom Mobile Fitting Adjustments */
+    .form-card { padding: 25px 20px !important; }
+    .modal-content { padding: 35px 20px !important; }
+    .hero-actions { flex-direction: column; gap: 12px; width: 100%; }
+    .hero-actions .btn { width: 100%; text-align: center; }
+    .stats-grid { grid-template-columns: 1fr; gap: 25px; padding-top: 30px; }
+    .antalya-main-card { padding: 25px 20px !important; }
+    
+    /* Fix strategic connectivity table fitting on narrow screens */
+    .location-highlights div[style*="padding: 22px 20px"] { padding: 15px 10px !important; }
+    .location-highlights div[style*="grid-template-columns: 1.8fr 1fr 1fr"] { 
+        grid-template-columns: 1.5fr 1.1fr 0.9fr !important;
+        font-size: 13px !important; 
+    }
 }
 
 /* Custom Scrollbar for Proximity List */
