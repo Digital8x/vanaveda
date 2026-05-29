@@ -24,7 +24,8 @@
 }
 
 @keyframes shine {
-    to { background-position: 200% center; }
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
 }
 
 /* Reset */
@@ -368,10 +369,19 @@ button:disabled { opacity: 0.7; cursor: not-allowed; }
 .modal-content h3 {
     font-family: var(--font-heading);
     font-size: 34px; font-weight: 800;
-    color: var(--accent-color);
     margin-bottom: 8px;
     letter-spacing: 0.5px;
     text-shadow: 0 0 30px rgba(212,175,55,0.3);
+    
+    /* Live Shimmering Gold Gradient */
+    display: inline-block;
+    background: var(--gold-gradient) !important;
+    background-size: 200% auto !important;
+    animation: shine 3s linear infinite !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    color: transparent !important;
 }
 .modal-content > p { font-size: 14px; color: var(--text-muted); letter-spacing: 0.4px; }
 .modal-form { display: flex; flex-direction: column; gap: 16px; margin-top: 28px; }
