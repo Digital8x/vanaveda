@@ -1,0 +1,7 @@
+RewriteEngine On
+
+# 1. Route all API calls to Node.js backend running on port 3001
+RewriteRule ^api/(.*) http://127.0.0.1:3001/api/$1 [P,L]
+
+# 2. Route all Admin Panel calls to Node.js backend running on port 3001
+RewriteRule ^admin(.*) http://127.0.0.1:3001/admin$1 [P,L]
