@@ -61,10 +61,10 @@ app.get('/admin/*', (req, res) => res.sendFile(path.join(__dirname, 'admin', 'da
 app.use('/images', express.static(path.join(__dirname, '..', 'images')));
 
 // ── Health Check
-app.get('/api/health', (req, res) => res.json({ status: 'ok', project: process.env.PROJECT_NAME || 'Codename Vana Veda', time: new Date() }));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', project: process.env.PROJECT_NAME || 'Vana Veda', time: new Date() }));
 
 // ── Config Endpoint
-app.get('/api/config', (req, res) => res.json({ project_name: process.env.PROJECT_NAME || 'Codename Vana Veda' }));
+app.get('/api/config', (req, res) => res.json({ project_name: process.env.PROJECT_NAME || 'Vana Veda' }));
 
 // ── Serve Frontend
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
@@ -79,7 +79,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`\n🏡 ${process.env.PROJECT_NAME || 'Codename Vana Veda'} Server`);
+  console.log(`\n🏡 ${process.env.PROJECT_NAME || 'Vana Veda'} Server`);
   console.log(`✅ Running on port ${PORT}`);
   console.log(`🌐 Site: http://localhost:${PORT}`);
   console.log(`🔐 Admin: http://localhost:${PORT}/admin\n`);

@@ -159,7 +159,7 @@ const exportLeads = async (req, res) => {
       ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(','));
 
       res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-      res.setHeader('Content-Disposition', `attachment; filename="GreenGold_Leads_${Date.now()}.csv"`);
+      res.setHeader('Content-Disposition', `attachment; filename="VanaVeda_Leads_${Date.now()}.csv"`);
       return res.send('\uFEFF' + [headers.join(','), ...rows].join('\n'));
     }
 
@@ -181,7 +181,7 @@ const exportLeads = async (req, res) => {
     leads.forEach(l => sheet.addRow(l));
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', `attachment; filename="GreenGold_Leads_${Date.now()}.xlsx"`);
+    res.setHeader('Content-Disposition', `attachment; filename="VanaVeda_Leads_${Date.now()}.xlsx"`);
     await workbook.xlsx.write(res);
     return res.end();
   } catch (err) {
