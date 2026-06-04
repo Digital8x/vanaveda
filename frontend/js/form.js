@@ -91,9 +91,10 @@ const handleFormSubmit = async (formEl, sourceButton) => {
     });
     const data = await res.json();
     if (data.success) {
-      showFormSuccess(formEl);
       // Fire GTM event
       if (window.dataLayer) window.dataLayer.push({ event: 'lead_submitted', source: sourceButton });
+      // Redirect to thank you page for Google Ads conversion tracking
+      window.location.href = 'thank-you.html';
     } else {
       showFormError(formEl, data.message || 'Something went wrong. Please try again.');
       if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = origText; }
