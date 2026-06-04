@@ -20,11 +20,28 @@ const initITI = () => {
     if (el._itiInit) return;
     el._itiInit = true;
     const id = el.id || 'phone_' + i;
-    itiInstances[id] = window.intlTelInput(el, {
+    const iti = window.intlTelInput(el, {
       initialCountry: 'in',
       separateDialCode: true,
       preferredCountries: ['in', 'ae', 'gb', 'us', 'sg'],
       utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
+    });
+    itiInstances[id] = iti;
+
+    // Restrict input to numbers and enforce correct length according to country
+    el.addEventListener('input', function() {
+      // Remove any non-numeric characters
+      this.value = this.value.replace(/[^0-9]/g, '');
+      
+      // Get the placeholder for the current country (e.g. "81234 56789")
+      const placeholder = this.getAttribute('placeholder') || '';
+      // Count the number of digits in the placeholder to determine the max length
+      const expectedLength = placeholder.replace(/[^0-9]/g, '').length;
+      
+      // If an expected length is found, restrict the input to that length
+      if (expectedLength > 0 && this.value.length > expectedLength) {
+        this.value = this.value.slice(0, expectedLength);
+      }
     });
   });
 };
